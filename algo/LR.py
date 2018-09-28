@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 19 13:29:14 2018
-
-@author: zhang
-"""
 import numpy as np
 import pandas as pd
 #from sklearn.datasets import load_boston
 import matplotlib.pyplot as plt
 from sklearn.cross_validation import train_test_split
 from sklearn import preprocessing
-
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
 """
 多元线性回归需要对各变量进行标准化，因为在求系数wj梯度时，每个样本计算值与其标签值的差要与每个样本对应的第j个属性值相乘，然后求和
 因此，如果属性值之间的差异太大，会造成系数无法收敛
@@ -71,14 +67,22 @@ def show_results(predict_y, test_y):
 
 if __name__ == "__main__":
     data, label = load_data()
+
     data = preprocessing.normalize(data.T).T
 
     train_x, test_x, train_y, test_y = train_test_split(data, label, train_size=0.75, random_state=33)
+
+    linreg = LinearRegression()
+    linreg.fit(train_x, train_y)
+    y_pred = linreg.predict(test_x)
+    rmse = np.sqrt(metrics.mean_squared_error(test_y, y_pred))
+    print(rmse)
+    '''
     train_x = np.mat(train_x)
     test_x = np.mat(test_x)
     train_y = np.mat(train_y).T  # (3,)转为矩阵变为行向量了,需要转置
     test_y = np.mat(test_y).T
-
+    
     #     weights = least_square(train_x, train_y)
     #     predict_y = test_x * weights
     #     show_results(predict_y, test_y)
@@ -90,3 +94,4 @@ if __name__ == "__main__":
 #     weights = stochastic_gradient_descent(train_x, train_y, 100, 0.01)
 #     predict_y = test_x * weights
 #     show_results(predict_y, test_y)
+    '''
