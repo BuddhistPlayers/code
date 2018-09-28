@@ -13,7 +13,7 @@ from sklearn import metrics
 '''
 
 # 导入数据集
-def loadData(filaName):
+def loadData():
     df = pd.read_csv('C:\\Users\\subshine\\Desktop\\train1.csv', sep=',', header=0, index_col=0, encoding='ANSI')
     label = df['totals.transactionRevenue']
     data = df.drop('totals.transactionRevenue', axis=1)
@@ -94,9 +94,9 @@ def getMean(Tree):
 def pruneTree(Tree,testData):
     if shape(testData)[0]==0: return getMean(Tree)
     if isTree(Tree['left'])or isTree(Tree['right']):
-        dataL,dataR = dataSplit(testData,Tree['spInd'],Tree['spVal'])
+        dataL,dataR = dataSplit(testData, Tree['spInd'], Tree['spVal'])
     if isTree(Tree['left']):
-        Tree['left'] = pruneTree(Tree['left'],dataL)
+        Tree['left'] = pruneTree(Tree['left'], dataL)
     if isTree(Tree['right']):
         Tree['right'] = pruneTree(Tree['right'],dataR)
     if not isTree(Tree['left']) and not isTree(Tree['right']):
@@ -136,17 +136,17 @@ def TreeForecast(Tree,testData):
     return y_hat
 
 if __name__=="__main__":
-    dataMat,y = loadData()
+    dataMat = loadData()
     train, test = train_test_split(dataMat, train_size=0.75, random_state=33)
     trainMat = mat(train)
-    op = [1,6]    # 参数1：剪枝前总方差与剪枝后总方差差值的最小值；参数2：将数据集划分为两个子数据集后，子数据集中的样本的最少数量；
-    theCreateTree =  createTree(dataMat,op)
+    op = [1, 6]    # 参数1：剪枝前总方差与剪枝后总方差差值的最小值；参数2：将数据集划分为两个子数据集后，子数据集中的样本的最少数量；
+    theCreateTree = createTree(trainMat, op)
    # 测试数据
     testMat = mat(test)
     #thePruneTree =  pruneTree(theCreateTree, dataMat2)
     #print"剪枝后的后树：\n",thePruneTree
     y = testMat[:, -1]
-    y_hat = TreeForecast(theCreateTree,testMat)
+    y_hat = TreeForecast(theCreateTree, testMat)
     rmse = sqrt(metrics.mean_squared_error(y, y_hat))
     print(rmse)
     #print corrcoef(y_hat,y,rowvar=0)[0,1]              # 用预测值与真实值计算相关系数
