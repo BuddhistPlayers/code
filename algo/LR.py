@@ -12,7 +12,6 @@ from sklearn import metrics
 因此，如果属性值之间的差异太大，会造成系数无法收敛
 """
 
-
 #  最小二乘法直接求解权重系数
 def least_square(train_x, train_y):
     """
