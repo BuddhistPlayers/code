@@ -4,6 +4,7 @@ from numpy import *
 import pandas as pd
 from sklearn.cross_validation import train_test_split
 from sklearn import metrics
+
 # 三大步骤：
 '''
 1、特征的选择：标准：总方差最小
